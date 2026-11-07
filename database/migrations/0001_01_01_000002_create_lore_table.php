@@ -21,26 +21,7 @@ return new class extends Migration
             $table->boolean('is_dm_only')->default(false);
         });
 
-        // Session table: this is where we store actual session entries and data
-        Schema::create('game_sessions', function (Blueprint $table) {
-            $table->ulid('session_id')->primary();
 
-            
-            $table->foreignUlid('campaign_id')->constrained('campaigns', 'campaign_id')->cascadeOnDelete();
-
-            $table->unsignedSmallInteger('session_number');
-            $table->date('session_date');
-            $table->string('location_id');
-            $table->string('loots')->nullable();
-            $table->string('npcs')->nullable();
-            $table->longText('notes')->nullable();
-            $table->longText('session_summary')->nullable();
-            $table->longText('ai_summary')->nullable();
-
-            $table->timestamps();
-
-            $table->unique(['campaign_id', 'session_number']);
-        });
 
         // Session Participants table: this is where we store the participants for each session, this is where we store 
         // the characters that participated in each session
@@ -74,22 +55,7 @@ return new class extends Migration
         });
 
 
-        Schema::table('campaign_members', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->cascadeOnDelete();
-            $table->foreignId('campaign_id')
-                ->constrained('campaigns', 'campaign_id')
-                ->cascadeOnDelete();
-            $table->dateTime('joined_at')->nullable();
-            $table->dateTime('left_at')->nullable();
-            
-            $table->string('role',20);
-
-
-            $table->timestamps();
-        });
+        
     }
 
     /**
@@ -99,7 +65,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('session_logs');
         Schema::dropIfExists('session_participants');
-        Schema::dropIfExists('game_sessions');
+        
         Schema::dropIfExists('lore');
     }
 };

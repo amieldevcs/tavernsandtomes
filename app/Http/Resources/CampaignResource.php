@@ -14,6 +14,14 @@ class CampaignResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'campaign_id' => $this->campaign_id,
+            'campaign_name' => $this->campaign_name,
+            'ruleset' => $this->ruleset,
+            'campaign_start_date' => $this->campaign_start_date?->toDateString(),
+            'campaign_end_date' => $this->campaign_end_date?->toDateString(),
+            'is_dm' => $this->isDm($request->user()),
+            'members_count' => $this->whenCounted('members')
+        ];
     }
 }
