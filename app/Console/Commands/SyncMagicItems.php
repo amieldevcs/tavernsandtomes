@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Dnd\EquipmentCategoryImporter;
+use App\Services\Dnd\ItemImporter;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-
-use App\Services\Dnd\EquipmentCategoryImporter;
-use App\Services\Dnd\ItemImporter;
 
 #[Signature('dnd:sync-magic-items')]
 #[Description('Command Import and synchronize D&D magic items')]
@@ -20,7 +19,8 @@ class SyncMagicItems extends Command
     /**
      * Execute the console command.
      */
-    public function handle(EquipmentCategoryImporter $categoryImporter, ItemImporter $itemImporter) {
+    public function handle(EquipmentCategoryImporter $categoryImporter, ItemImporter $itemImporter)
+    {
         $this->info('Importing equipment categories...');
 
         $categories = $categoryImporter->import();

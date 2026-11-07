@@ -44,10 +44,9 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->longText('character_biography');
 
-
             $table->timestamps();
         });
-        
+
     }
 
     /**

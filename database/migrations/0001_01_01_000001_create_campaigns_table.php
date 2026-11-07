@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-         // Campaign table: only saves the name and the ruleset we're using
+        // Campaign table: only saves the name and the ruleset we're using
         Schema::create('campaigns', function (Blueprint $table) {
             $table->ulid('campaign_id')->primary();
             $table->string('campaign_name')->index();
@@ -39,9 +39,8 @@ return new class extends Migration
             // Campaign specific stuff
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_story_writer')->default(false);
-            
-            $table->string('role',20);
 
+            $table->string('role', 20);
 
             $table->timestamps();
         });
@@ -69,12 +68,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
-                // Session table: this is where we store actual session entries and data
+        // Session table: this is where we store actual session entries and data
         Schema::create('game_sessions', function (Blueprint $table) {
             $table->ulid('session_id')->primary();
 
-            
             $table->foreignUlid('campaign_id')->constrained('campaigns', 'campaign_id')->cascadeOnDelete();
 
             $table->unsignedSmallInteger('session_number');
@@ -90,7 +87,7 @@ return new class extends Migration
 
             $table->unique(['campaign_id', 'session_number']);
         });
-        
+
     }
 
     /**

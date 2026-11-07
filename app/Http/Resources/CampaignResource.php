@@ -21,7 +21,7 @@ class CampaignResource extends JsonResource
             'campaign_start_date' => $this->campaign_start_date?->toDateString(),
             'campaign_end_date' => $this->campaign_end_date?->toDateString(),
             'is_dm' => $this->isDm($request->user()),
-            'members_count' => $this->whenCounted('members')
+            'members_count' => $this->whenCounted('members'),
         ];
     }
 }

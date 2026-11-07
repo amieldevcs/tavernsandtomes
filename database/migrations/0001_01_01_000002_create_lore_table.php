@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // Lore Entries for the Campaign, this is where we store the worldbuilding and lore for the campaign
-         Schema::create('lore', function (Blueprint $table) {
+        Schema::create('lore', function (Blueprint $table) {
             $table->id();
             $table->string('campaign_id');
             $table->foreign('campaign_id')->references('campaign_id')->on('campaigns')->onDelete('cascade');
@@ -21,9 +21,7 @@ return new class extends Migration
             $table->boolean('is_dm_only')->default(false);
         });
 
-
-
-        // Session Participants table: this is where we store the participants for each session, this is where we store 
+        // Session Participants table: this is where we store the participants for each session, this is where we store
         // the characters that participated in each session
         Schema::create('session_participants', function (Blueprint $table) {
             $table->id();
@@ -40,7 +38,6 @@ return new class extends Migration
             $table->unique(['session_id', 'character_id']);
         });
 
-        
         // Session Logs table: this is where we store the logs for each session, this is where we store the notes for each session
         Schema::create('session_logs', function (Blueprint $table) {
             $table->id();
@@ -54,8 +51,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
-        
     }
 
     /**
@@ -65,7 +60,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('session_logs');
         Schema::dropIfExists('session_participants');
-        
+
         Schema::dropIfExists('lore');
     }
 };

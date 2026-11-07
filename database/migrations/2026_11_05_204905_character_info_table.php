@@ -79,11 +79,6 @@ return new class extends Migration
         //     $table->unique(['character_id', 'feature_id']);
         // });
 
-
-
-
-
-
         // Schema::create('character_details', function (Blueprint $table) {
         //     $table->id();
 

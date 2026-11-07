@@ -37,6 +37,6 @@ return [
 
     'dnd' => [
         'base_url' => env('DND_API_BASE_URL', 'https://www.dnd5eapi.co/api/2014'),
-    ]
+    ],
 
 ];

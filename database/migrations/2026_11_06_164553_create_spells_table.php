@@ -39,7 +39,7 @@ return new class extends Migration
             $table->string('casting_time')->nullable();
             $table->integer('level')->nullable();
             $table->string('attack_type')->nullable();
-            
+
             $table->foreignId('magic_schools_id')
                 ->nullable()
                 ->constrained('magic_schools')

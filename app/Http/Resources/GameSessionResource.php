@@ -23,7 +23,7 @@ class GameSessionResource extends JsonResource
             'npcs' => $this->npcs,
             'session_summary' => $this->session_summary,
             'ai_summary' => $this->ai_summary,
-            'notes' => $this->notes
+            'notes' => $this->notes,
         ];
     }
 }

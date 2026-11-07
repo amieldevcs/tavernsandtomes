@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('spells_known');
             $table->unsignedTinyInteger('caster_type_mod');
 
-
             $table->string('source_url')->nullable();
             $table->timestamps();
         });
@@ -41,8 +40,6 @@ return new class extends Migration
             $table->string('source_url')->nullable();
             $table->timestamps();
         });
-
-
 
     }
 

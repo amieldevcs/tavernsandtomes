@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Campaign;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CampaignPolicy
 {
@@ -21,7 +20,7 @@ class CampaignPolicy
      */
     public function view(User $user, Campaign $campaign): bool
     {
-        return $campaign->members()->where('user.id', $user->id)->exists();
+        return $campaign->isMember($user);
     }
 
     /**
@@ -37,7 +36,7 @@ class CampaignPolicy
      */
     public function update(User $user, Campaign $campaign): bool
     {
-        return $campaign->isDM($user);
+        return $campaign->isAdmin($user);
     }
 
     /**
@@ -45,7 +44,7 @@ class CampaignPolicy
      */
     public function delete(User $user, Campaign $campaign): bool
     {
-        return $campaign->isDM($user);
+        return $campaign->isAdmin($user);
     }
 
     /**
@@ -64,7 +63,23 @@ class CampaignPolicy
         return false;
     }
 
-    public function manageSessions(User $user, Campaign $campaign): bool {
+    public function manageMembers(User $user, Campaign $campaign): bool
+    {
+        return $campaign->isAdmin($user);
+    }
+
+    public function manageSessions(User $user, Campaign $campaign): bool
+    {
+        return $campaign->isAdmin($user) || $campaign->isStoryWriter($user);
+    }
+
+    public function deleteSessions(User $user, Campaign $campaign): bool
+    {
+        return $campaign->isAdmin($user);
+    }
+
+    public function viewSecrets(User $user, Campaign $campaign): bool
+    {
         return $campaign->isDM($user);
     }
 }

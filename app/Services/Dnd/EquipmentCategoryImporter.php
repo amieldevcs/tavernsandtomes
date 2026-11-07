@@ -9,11 +9,13 @@ class EquipmentCategoryImporter
     /**
      * Create a new class instance.
      */
-    public function __construct(protected DndApiClient $api) {
+    public function __construct(protected DndApiClient $api)
+    {
         // Add stuff here
     }
 
-    public function import(): int {
+    public function import(): int
+    {
         $categories = $this->api->getAll('equipment-categories');
 
         $imported = 0;

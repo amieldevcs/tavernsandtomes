@@ -25,8 +25,9 @@ class StoreCampaignRequest extends FormRequest
         return [
             'campaign_name' => ['required', 'string', 'max255'],
             'ruleset' => ['sometiemes', 'in:2014'],
-            'campaign_start_date' => ['required','date'],
-            'campaign_end_date' => ['nullable', 'date', 'after_or_equal:campaign_start_date']
+            'campaign_start_date' => ['required', 'date'],
+            'campaign_end_date' => ['nullable', 'date', 'after_or_equal:campaign_start_date'],
+            'creator_role' => ['sometimes', Rule::in(['dm', 'player'])],
         ];
     }
 }

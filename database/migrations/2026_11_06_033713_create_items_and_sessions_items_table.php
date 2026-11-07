@@ -14,13 +14,13 @@ return new class extends Migration
         // D&D Global compedium of items
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->string('index'); //index: cloak-of-protection
-            $table->string('name'); //Cloak of Protection
+            $table->string('index'); // index: cloak-of-protection
+            $table->string('name'); // Cloak of Protection
             $table->text('description')->nullable(); // Gain 1 bonus AC and saving throws while wearing this cloak.
             $table->string('rarity'); // Uncommon
             $table->string('equipment_category'); // Wondrous Item
-            $table->string('image_url')->nullable(); ///api/images/magic-items/cloak-of-protection.png
-            $table->string('source_url')->nullable(); ///api/magic-items/cloak-of-protection
+            $table->string('image_url')->nullable(); // /api/images/magic-items/cloak-of-protection.png
+            $table->string('source_url')->nullable(); // /api/magic-items/cloak-of-protection
             $table->timestamps();
         });
 
@@ -33,8 +33,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        
-
         // Handles variatons among items
         Schema::create('item_variants', function (Blueprint $table) {
             $table->id();
@@ -43,11 +41,10 @@ return new class extends Migration
                 ->constrained('items')
                 ->cascadeOnDelete();
 
-
             $table->foreignId('variant_id')
                 ->constrained('items')
                 ->cascadeOnDelete();
-            
+
             $table->timestamps();
         });
 

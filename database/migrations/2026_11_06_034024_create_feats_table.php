@@ -16,7 +16,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         Schema::create('character_feats', function (Blueprint $table) {
             $table->id();
 

@@ -7,20 +7,17 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Campaign;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -35,10 +32,11 @@ class User extends Authenticatable
         ];
     }
 
-    public function campaigns(): BelongsToMany {
+    public function campaigns(): BelongsToMany
+    {
         return $this->belongsToMany(Campaign::class, 'campaign_members', 'user_id', 'campaign_id')
-                    ->wthPivot('role')
-                    ->withTimeStamps();
+            ->wthPivot('role')
+            ->withTimeStamps();
 
     }
 }

@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCampaignRequest;
 use App\Http\Resources\CampaignResource;
-use Illuminate\Http\Request;
 use App\Models\Campaign;
-use Illuminate\Support\Facades\DB;
 use Enums\CampaignRole;
 use Illuminate\Auth\Access\Gate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller
 {
@@ -28,18 +28,19 @@ class CampaignController extends Controller
      */
     public function store(StoreCampaignRequest $request)
     {
-        $campaign = DB::transaction( function () use ($request) {
-            // returns only the fields that passed the rules.
-            $campaign = new Campaign($request->validated());
+        $campaign = DB::transaction(function () use ($request) {
 
-            // Backend checks to tell who the logged in user is
-            $campaign->dungeon_master_id = $request->user()->id;
+            // safe()->except() drops creator_role from the data, sicne it isn't a column on the campaigns table
+            // and shouldn't go into the model.
+            $campaign = new Campaign($request->safe()->except('creator_role'));
+            $campaign->created_by = $request->user()->id;
             $campaign->save();
 
-            // Also add the DM too the members pivot, so $user->campaigns find every campaign they belong to with one query
-            $campaign->members()->attach($request->user()->id, ['role' => CampaignRole::Dm->value]);
+            $campaign->members()->attach($request->user()->id, [
+                'role' => $request->input('creator_role', CampaignRole::Dm->value),
+                'is_admin' => true, // whoever sets it up is the admin.
+            ]);
 
-            return $campaign;
         });
 
         return (new CampaignResource($campaign))->response()->setStatusCode(201);
@@ -47,12 +48,13 @@ class CampaignController extends Controller
 
     /**
      * GET /campaigns/{campaign} show one campaign
-     * Laravel's "route model binding" 
+     * Laravel's "route model binding"
      */
     public function show(Campaign $campaign)
     {
         // Throws 403 automatically if the policy's view() return false
         Gate::authorize('view', $campaign);
+
         return new CampaignResource($campaign->loadCount('members'));
     }
 
@@ -62,7 +64,8 @@ class CampaignController extends Controller
     public function update(StoreCampaignRequest $request, Campaign $campaign)
     {
         Gate::authorize('update', $campaign);
-        $campaign->update($request->validated());;
+        $campaign->update($request->validated());
+
         return new CampaignResource($campaign);
     }
 
@@ -73,6 +76,7 @@ class CampaignController extends Controller
     {
         Gate::authorize('delete', $campaign);
         $campaign->delete();            // soft delete: row stays, deleted_at is set
+
         return response()->noContent(); // 204: success, nothing to send back
     }
 }

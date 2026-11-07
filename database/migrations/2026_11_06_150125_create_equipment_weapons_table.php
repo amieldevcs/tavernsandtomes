@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('special')->nullable();
             $table->text('contents')->nullable();
             $table->text('properties')->nullable();
-            
+
             $table->timestamps();
         });
 
@@ -36,8 +36,8 @@ return new class extends Migration
             $table->string('weapon_category');
             $table->string('weapon_range');
 
-            $table->string('index')->unique(); 
-            $table->string('name'); 
+            $table->string('index')->unique();
+            $table->string('name');
 
             $table->boolean('is_magical')->default(false);
             $table->boolean('requires_attunement')->default(false);
@@ -59,30 +59,27 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->string('damage_dice')->nullable();
-            
+
             $table->foreignId('alternative_damage_type_id')
                 ->constrained('damage_types')
                 ->cascadeOnDelete();
 
             $table->string('alternative_damage_dice')->nullable();
 
-
             $table->timestamps();
         });
 
-
-        //----------------
+        // ----------------
         // Weapon properties for items
         // https://www.dnd5eapi.co/api/2014/weapon-properties
         Schema::create('weapon_properties', function (Blueprint $table) {
             $table->id();
             $table->string('index')->unique();
-            $table->string('name'); 
+            $table->string('name');
             $table->longText('desc')->nullable();
             $table->string('url')->nullable();
             $table->timestamps();
         });
-
 
         // Properties of the weapon, such as thrown, versatile, finesse, etc
         Schema::create('equipment_weapon_properties', function (Blueprint $table) {
@@ -109,9 +106,9 @@ return new class extends Migration
         Schema::dropIfExists('equipments');
         Schema::dropIfExists('weapon_attributes');
         Schema::dropIfExists('weapons_damage_types');
-        Schema::dropIfExists('equipment_weapon_properties'); 
+        Schema::dropIfExists('equipment_weapon_properties');
 
-        //-----------------
+        // -----------------
         Schema::dropIfExists('weapon_properties');
     }
 };

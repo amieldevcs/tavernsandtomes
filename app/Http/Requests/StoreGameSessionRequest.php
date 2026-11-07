@@ -2,33 +2,19 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Foundation\Http\FormRequest;
+use GameSessionRequest;
 
-class StoreGameSessionRequest extends FormRequest
+class StoreGameSessionRequest extends GameSessionRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    // Route: POST /campaigns/{campaign}/sessions. Laravel has already
+    // turned {campaign} into a Campaign model (route model binding).
+    protected function campaign(): Campaign
     {
-        return false;
+        return $this->route('campaign');
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    protected function ignoredSessionId(): ?string
     {
-        return [
-            'session_number' => ['sometimes', 'integer', 'min:1'],
-            'session_date' => ['required', 'date'],
-            'location_id' => ['nullable', 'string'],
-            'npcs' => ['nullable', 'string'],
-            'notes' => ['nullable', 'string'],
-            'session_summary' => ['nullable', 'string']
-        ];
+        return null; // nothing to ignore when creating
     }
 }

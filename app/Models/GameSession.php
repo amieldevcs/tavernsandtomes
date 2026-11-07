@@ -4,10 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Campaign;
 
 class GameSession extends Model
 {
@@ -15,13 +12,24 @@ class GameSession extends Model
 
     protected $primaryKey = 'session_id';
 
-    protected $fillable = ['session_number', 'session_date', 'location_id', 'notes', 'session_summary'];
+    protected $fillable = [
+        'session_number',
+        'session_date',
+        'location_id',
+        'notes',
+        'session_summary',
+    ];
 
-    protected function casts(): array {
-        return ['session_date' => 'date'];
+    protected function casts(): array
+    {
+        return [
+            'session_number' => 'integer',
+            'session_date' => 'date',
+        ];
     }
 
-    public function campaign(): BelongsTo {
+    public function campaign(): BelongsTo
+    {
         return $this->belongsTo(Campaign::class, 'campaign_id', 'campaign_id');
     }
 }
