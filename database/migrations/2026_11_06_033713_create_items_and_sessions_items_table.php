@@ -56,7 +56,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('session_id');
-            $table->foreign('session_id')->references('session_id')->on('sessions')->onDelete('cascade');
+            $table->foreign('session_id')->references('session_id')->on('game_sessions')->onDelete('cascade');
 
             $table->foreignId('item_id')
                 ->constrained('items')

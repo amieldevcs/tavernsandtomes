@@ -13,12 +13,15 @@ return new class extends Migration
     {
          // Campaign table: only saves the name and the ruleset we're using
         Schema::create('campaigns', function (Blueprint $table) {
-            $table->string('campaign_id')->primary()->unique();
+            $table->ulid('campaign_id')->primary();
             $table->string('campaign_name')->index();
-            $table->string('ruleset');
+            $table->string('ruleset')->default('2014');
             $table->string('dungeon_master_id');
-            $table->string('campaign_start_date');
-            $table->string('campaign_end_date')->nullable();
+            $table->dateTime('campaign_start_date');
+            $table->dateTime('campaign_end_date')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
         });
 
         // Quest table

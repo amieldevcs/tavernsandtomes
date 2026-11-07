@@ -22,18 +22,24 @@ return new class extends Migration
         });
 
         // Session table: this is where we store actual session entries and data
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('session_id')->primary()->unique();
-            $table->smallInteger('session_number');
+        Schema::create('game_sessions', function (Blueprint $table) {
+            $table->ulid('session_id')->primary();
+
+            
+            $table->foreignUlid('campaign_id')->constrained('campaigns', 'campaign_id')->cascadeOnDelete();
+
+            $table->unsignedSmallInteger('session_number');
             $table->date('session_date');
             $table->string('location_id');
             $table->string('loots')->nullable();
             $table->string('npcs')->nullable();
             $table->longText('notes')->nullable();
             $table->longText('session_summary')->nullable();
+            $table->longText('ai_summary')->nullable();
 
-            $table->string('campaign_id');
-            $table->foreign('campaign_id')->references('campaign_id')->on('campaigns')->onDelete('cascade');
+            $table->timestamps();
+
+            $table->unique(['campaign_id', 'session_number']);
         });
 
         // Session Participants table: this is where we store the participants for each session, this is where we store 
@@ -42,7 +48,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('session_id');
-            $table->foreign('session_id')->references('session_id')->on('sessions')->onDelete('cascade');
+            $table->foreign('session_id')->references('session_id')->on('game_sessions')->onDelete('cascade');
 
             $table->foreignId('character_id')
                 ->constrained('characters')
@@ -59,11 +65,29 @@ return new class extends Migration
             $table->id();
 
             $table->string('session_id');
-            $table->foreign('session_id')->references('session_id')->on('sessions')->onDelete('cascade');
+            $table->foreign('session_id')->references('session_id')->on('game_sessions')->onDelete('cascade');
 
             $table->text('log_entry');
             $table->string('log_type')->default('general');
             $table->datetime('logged_at')->nullable();
+            $table->timestamps();
+        });
+
+
+        Schema::table('campaign_members', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+            $table->foreignId('campaign_id')
+                ->constrained('campaigns', 'campaign_id')
+                ->cascadeOnDelete();
+            $table->dateTime('joined_at')->nullable();
+            $table->dateTime('left_at')->nullable();
+            
+            $table->string('role',20);
+
+
             $table->timestamps();
         });
     }
@@ -75,7 +99,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('session_logs');
         Schema::dropIfExists('session_participants');
-        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('game_sessions');
         Schema::dropIfExists('lore');
     }
 };
